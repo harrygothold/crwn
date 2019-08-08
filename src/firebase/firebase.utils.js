@@ -15,7 +15,7 @@ const config = {
 firebase.initializeApp(config);
 
 export const convertCollectionsSnapshotToMap = collections => {
-  const transformedCollection = collections.docs().map(doc => {
+  const transformedCollection = collections.docs.map(doc => {
     const {title, items} = doc.data();
     return {
       routeName: encodeURI(title.toLowerCase()),
@@ -24,7 +24,7 @@ export const convertCollectionsSnapshotToMap = collections => {
       items
     }
   });
-  transformedCollection.reduce((accumalator, collection) => {
+  return transformedCollection.reduce((accumalator, collection) => {
     accumalator[collection.title.toLowerCase()] = collection;
     return accumalator;
   }, {})
