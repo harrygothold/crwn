@@ -1,50 +1,46 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import "./signin.styles.scss";
 import FormInput from "../form-input/FormInput";
 import CustomButton from "../custom-button/CustomButton";
 import { auth, SignInWithGoogle } from "../../firebase/firebase.utils";
 
-class SignIn extends Component {
-  state = {
-    email: "",
-    password: ""
-  };
+const SignIn = () => {
+  const [formData, setFormData] = useState({email: "", password: ""});
 
-  handleSubmit = async e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    const {email, password} = this.state;
+    const {email, password} = formData;
     try {
       await auth.signInWithEmailAndPassword(email, password);
-    this.setState({ email: "", password: "" });
+    setFormData({email: "", password: ""});
     } catch (error) {
       console.error(error);
     }
   };
 
-  handleChange = e => {
+  const handleChange = e => {
     const { value, name } = e.target;
-    this.setState({ [name]: value });
+    setFormData({[name]: value})
   };
-
-  render() {
+    const {email, password} = formData;
     return (
       <div className="sign-in">
         <h2>I already have an account</h2>
         <span>Sign In with your email and password</span>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <FormInput
             type="email"
             name="email"
-            handleChange={this.handleChange}
-            value={this.state.email}
+            handleChange={handleChange}
+            value={email}
             required
             label="Email"
           />
           <FormInput
             type="password"
             name="password"
-            value={this.state.password}
-            handleChange={this.handleChange}
+            value={password}
+            handleChange={handleChange}
             required
             label="Password"
           />
@@ -57,7 +53,6 @@ class SignIn extends Component {
         </form>
       </div>
     );
-  }
-}
+  };
 
 export default SignIn;
